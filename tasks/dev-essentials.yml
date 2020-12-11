@@ -1,0 +1,19 @@
+---
+- name: "ansible-Install a list of packages"
+  dnf:
+    name:
+      - nano
+      - mlocate
+      - wget
+      - curl
+      - htop
+      - net-tools
+      - bind-utils
+      - lsof
+      - git
+    state: present
+
+- name: "install the 'Development tools' package group"
+  dnf:
+    name: "@Development tools"
+    state: present
