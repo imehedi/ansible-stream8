@@ -1,0 +1,6 @@
+---
+# defaults file for ansible-role-stream8
+
+dev_user: stream
+dev_user_pubkey: "/Users/imehedi/.ssh/id_rsa.pub"
+golang_var: 1.15.6
