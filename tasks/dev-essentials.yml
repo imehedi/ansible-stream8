@@ -1,4 +1,16 @@
 ---
+- name: "Install cockpit"
+  dnf:
+    name:
+      - cockpit
+    state: present
+
+- name: "Enable cockpit"
+  command: systemctl enable cockpit
+
+- name: "Restart cockpit"
+  command: systemctl start cockpit
+
 - name: "ansible-Install a list of packages"
   dnf:
     name:
