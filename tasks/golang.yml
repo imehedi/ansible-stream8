@@ -1,0 +1,78 @@
+---
+
+- name: "check for pre-existing go"
+  stat:
+    path: "/usr/local/go/bin/go"
+  register: gopath
+
+- name: "current version found, proceed"
+  block:
+    - name: set fact go version
+      command: "/usr/local/go/bin/go version"
+      register: current_go_release_package
+
+    - name: "decide whether to perform new install"
+      set_fact:
+        new_go_install: true
+      when:
+        - "golang_var not in current_go_release_package.stdout"
+  when: gopath.stat.exists == true
+
+- name: "no current version found, set for new install"
+  set_fact:
+    new_go_install: true
+  when: gopath.stat.exists == false
+
+- name: "perform golang installation"
+  block:
+    - name: collect golang and extract
+      get_url:
+        url: "https://dl.google.com/go/go{{ golang_var }}.linux-amd64.tar.gz"
+        dest: "/usr/src/go{{ golang_var }}.linux-amd64.tar.gz"
+
+    - name: unarchive collected golang package
+      unarchive:
+        src: "/usr/src/go{{ golang_var }}.linux-amd64.tar.gz"
+        dest: /usr/local
+        remote_src: yes
+
+    - name: add env path to profile
+      lineinfile:
+        path: "/etc/profile"
+        line: "export PATH=$PATH:/usr/local/go/bin"
+
+    - name: add gopath path to profile
+      lineinfile:
+        path: "/etc/profile"
+        line: "export GOPATH=/opt/go"
+
+    - name: cleanup source files
+      file:
+        path: "/usr/src/go{{ golang_var }}.linux-amd64.tar.gz"
+        state: absent
+
+    - name: create go/src path
+      file:
+        path: "/opt/go/src"
+        owner: "{{ dev_user }}"
+        group: "{{ dev_user }}"
+        mode: '0755'
+        state: directory
+
+    - name: create go/lib path
+      file:
+        path: "/opt/go/lib"
+        owner: "{{ dev_user }}"
+        group: "{{ dev_user }}"
+        mode: '0755'
+        state: directory
+
+    - name: create go/bin path
+      file:
+        path: "/opt/go/bin"
+        owner: "{{ dev_user }}"
+        group: "{{ dev_user }}"
+        mode: '0755'
+        state: directory
+  when:
+    - new_go_install == true
