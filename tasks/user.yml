@@ -1,24 +1,24 @@
 ---
-- name: "add dev user"
+- name: "ansible_stream8 | profile: add dev user"
   user:
     name: "{{ dev_user }}"
     shell: /bin/bash
     groups: wheel
     append: yes
 
-- name: "Set authorized key taken from file"
+- name: "ansible_stream8 | profile: Set authorized key taken from file"
   authorized_key:
     user: "{{ dev_user }}"
     state: present
     key: "{{ lookup('file', dev_user_pubkey ) }}"
 
-- name: "Update sudoers file to allow passless sudo"
+- name: "ansible_stream8 | profile: Update sudoers file to allow passless sudo"
   lineinfile:
     path: /etc/sudoers
     regexp: '^# %wheel'
     line: '%wheel ALL=(ALL) NOPASSWD: ALL'
 
-- name: "Copy file with owner and permissions"
+- name: "ansible_stream8 | profile: Copy file with owner and permissions"
   copy:
     src: "files/.bash_profile"
     dest: "/home/{{ dev_user }}/.bash_profile"

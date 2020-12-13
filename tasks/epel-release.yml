@@ -1,9 +1,20 @@
 ---
-- name: Install a list of packages
+- name: "ansible_stream8 | epel release: Install a list of packages"
   dnf:
     name:
       - epel-release
-      - dnf-utils
     state: present
   notify:
     - update dnf
+
+- name: "ansible_stream8 | epel release: dnf check-updates"
+  dnf:
+    list: updates
+    update_cache: true
+
+- name: "ansible_stream8 | epel release: dnf security update"
+  dnf:
+    name: "*"
+    security: yes
+    state: latest
+    exclude: kernel*

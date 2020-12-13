@@ -1,0 +1,14 @@
+---
+- name: "ansible_stream8 | python: Install a list of packages"
+  dnf:
+    name:
+      - python38
+      - python38-pip
+    state: present
+
+- name: pip install packages
+  command: "python3 -m pip install {{ item }}"
+  with_items:
+    - ansible
+    - awscli
+  changed_when: true

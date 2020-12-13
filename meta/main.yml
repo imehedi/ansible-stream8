@@ -1,0 +1,15 @@
+galaxy_info:
+  author: "Mehedi H"
+  description: "a simple Ansible role to configure a 'Centos 8 Stream'
+  machine for development activities"
+  license: MIT
+  min_ansible_version: 2.9
+  platforms:
+    - name: EL
+      versions:
+        - 8
+
+  galaxy_tags:
+    - centos
+    - centos8
+    - stream

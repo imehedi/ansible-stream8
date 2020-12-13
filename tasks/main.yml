@@ -1,0 +1,30 @@
+---
+# tasks file for ansible_stream8
+- name: "ansible_stream8 | epel release"
+  include: epel-release.yml
+  tags:
+    - packages
+
+- name: "ansible_stream8 | essential packages"
+  include: dev-essentials.yml
+  tags:
+    - packages
+
+- name: "ansible_stream8 | user profile setup"
+  include: user.yml
+  tags:
+    - users
+
+- name: "ansible_stream8 | golang install"
+  include: golang.yml
+  tags:
+    - golang
+
+- name: "ansible_stream8 | python install"
+  include: python.yml
+  tags:
+    - python
+
+- name: Autoremove unneeded packages installed as dependencies
+  dnf:
+    autoremove: yes

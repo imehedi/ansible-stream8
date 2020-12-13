@@ -1,31 +1,40 @@
 ---
-- name: "Install cockpit"
+- name: "ansible_stream8 | essentials: Install cockpit"
   dnf:
     name:
       - cockpit
     state: present
 
-- name: "Enable cockpit"
-  command: systemctl enable cockpit
+# There is an issue with Centos8stream kernel breaking ansible
+#  systemd handing. https://bugzilla.redhat.com/show_bug.cgi?id=1855245
+# reverting to command line instead of systemd module
+- name: "ansible_stream8 | essentials: Enable cockpit"
+  command: "systemctl enable cockpit"
+  changed_when: true
 
-- name: "Restart cockpit"
-  command: systemctl start cockpit
+- name: "ansible_stream8 | essentials: Restart cockpit"
+  command: "systemctl start cockpit"
+  changed_when: true
 
-- name: "ansible-Install a list of packages"
+- name: "ansible_stream8 | essentials: install packages"
   dnf:
     name:
-      - nano
-      - mlocate
-      - wget
-      - curl
-      - htop
-      - net-tools
       - bind-utils
-      - lsof
+      - bzip2-devel
+      - curl
+      - gcc
       - git
+      - htop
+      - libffi-devel
+      - lsof
+      - mlocate
+      - nano
+      - net-tools
+      - openssl-devel
+      - wget
     state: present
 
-- name: "install the 'Development tools' package group"
+- name: "ansible_stream8 | essentials: 'Development tools' package group"
   dnf:
     name: "@Development tools"
     state: present
